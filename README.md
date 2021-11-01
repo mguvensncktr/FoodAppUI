@@ -1,4 +1,4 @@
-Food App UI Designed on Figma and built with React Native
+basic  app UI Designed on Figma and built with React Native
 
 Its just a simple UI with 2 screens.
 
