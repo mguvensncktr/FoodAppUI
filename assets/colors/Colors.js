@@ -7,6 +7,7 @@ const colors = {
     textLight: '#CDCDCD',
     white: '#FFFFFF',
     black: '#000000',
+    price: '#E4723C',
 
 }
 

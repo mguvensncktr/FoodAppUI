@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, SafeAreaView, Image, FlatList, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, Image, FlatList, ScrollView, TouchableOpacity } from 'react-native';
 import {
     Feather,
     MaterialCommunityIcons
@@ -9,8 +9,11 @@ import categoriesData from '../assets/data/categoriesData';
 import popularData from '../assets/data/popularData';
 import colors from '../assets/colors/Colors';
 import { useFonts } from 'expo-font';
+import { useNavigation } from '@react-navigation/native'
 
 const HomeScreen = () => {
+
+    const navigation = useNavigation();
 
     const renderCategoryItem = ({ item }) => {
         return (
@@ -86,7 +89,7 @@ const HomeScreen = () => {
                         <FlatList
                             data={categoriesData}
                             renderItem={renderCategoryItem}
-                            keyExtractor={item => item.id}
+                            keyExtractor={(item) => item.id}
                             horizontal
                             showsHorizontalScrollIndicator={false}
                         />
@@ -96,32 +99,39 @@ const HomeScreen = () => {
                 <View style={styles.popularContainer}>
                     <Text style={styles.popularTitle}>Popular</Text>
                     {popularData.map((item) => (
-                        <View style={[styles.popularCardContainer, { marginTop: item.id == '1' ? 10 : 20 }]}>
-                            <View>
+                        <TouchableOpacity key={item.id} onPress={() => navigation.navigate('Details', { item: item })}>
+                            <View
+                                style={[styles.popularCardContainer,
+                                {
+                                    marginTop: item.id == '1' ? 10 : 20
+                                }]}
+                            >
                                 <View>
-                                    <View style={styles.popularTopContainer}>
-                                        <MaterialCommunityIcons name="crown" size={12} color={colors.primary} />
-                                        <Text style={styles.popularTopText}>Top of the week</Text>
+                                    <View>
+                                        <View style={styles.popularTopContainer}>
+                                            <MaterialCommunityIcons name="crown" size={12} color={colors.primary} />
+                                            <Text style={styles.popularTopText}>Top of the week</Text>
+                                        </View>
+                                        <View style={styles.popularTitlesContainer}>
+                                            <Text style={styles.popularTitlesTitle}>{item.title}</Text>
+                                            <Text style={styles.popularTitlesWeight}>Weight {item.weight}</Text>
+                                        </View>
                                     </View>
-                                    <View style={styles.popularTitlesContainer}>
-                                        <Text style={styles.popularTitlesTitle}>{item.title}</Text>
-                                        <Text style={styles.popularTitlesWeight}>Weight {item.weight}</Text>
+                                    <View style={styles.popularCardBottom}>
+                                        <View style={styles.addButton}>
+                                            <Feather name="plus" size={10} color={colors.textDark} />
+                                        </View>
+                                        <View style={styles.ratingContainer}>
+                                            <MaterialCommunityIcons name="star" size={10} color={colors.textDark} />
+                                            <Text style={styles.itemRating}>{item.rating}</Text>
+                                        </View>
                                     </View>
                                 </View>
-                                <View style={styles.popularCardBottom}>
-                                    <View style={styles.addButton}>
-                                        <Feather name="plus" size={10} color={colors.textDark} />
-                                    </View>
-                                    <View style={styles.ratingContainer}>
-                                        <MaterialCommunityIcons name="star" size={10} color={colors.textDark} />
-                                        <Text style={styles.itemRating}>{item.rating}</Text>
-                                    </View>
+                                <View style={styles.popularCardRight}>
+                                    <Image source={item.image} style={styles.popularImage} />
                                 </View>
                             </View>
-                            <View style={styles.popularCardRight}>
-                                <Image source={item.image} style={styles.popularImage} />
-                            </View>
-                        </View>
+                        </TouchableOpacity>
                     ))}
                 </View>
             </ScrollView>
@@ -129,7 +139,7 @@ const HomeScreen = () => {
     )
 }
 
-const styles = StyleSheet.create({
+const styles = new StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: colors.background,
